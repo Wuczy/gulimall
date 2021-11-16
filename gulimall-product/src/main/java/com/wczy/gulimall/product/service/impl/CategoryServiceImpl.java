@@ -35,6 +35,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     @Override
     public List<CategoryDto> listWithTree() {
+        //FIXME 后续可改为递归
         List<CategoryEntity> categoryEntityList = this.list();
         if (CollUtil.isEmpty(categoryEntityList)) {
             return null;
@@ -50,12 +51,18 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                     BeanUtil.copyProperties(firstCategory, firstCategoryDto);
                     //得到二级分类
                     List<CategoryEntity> secondList = relationalMap.get(firstCategoryDto.getCatId());
+                    if (CollUtil.isEmpty(secondList)){
+                        return firstCategoryDto;
+                    }
                     List<CategoryDto> secondDtoList = secondList.stream()
                             .map(secondCategory -> {
                                 CategoryDto secondCategoryDto = new CategoryDto();
                                 BeanUtil.copyProperties(secondCategory, secondCategoryDto);
                                 //得到三级分类
                                 List<CategoryEntity> thirdList = relationalMap.get(secondCategoryDto.getCatId());
+                                if (CollUtil.isEmpty(thirdList)){
+                                    return secondCategoryDto;
+                                }
                                 List<CategoryDto> thirdDtoList = BeanUtil.copyToList(thirdList, CategoryDto.class).stream()
                                         .sorted(Comparator.comparing(CategoryDto::getSort))
                                         .collect(Collectors.toList());

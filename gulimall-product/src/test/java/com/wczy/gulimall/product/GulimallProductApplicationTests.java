@@ -1,26 +1,28 @@
 package com.wczy.gulimall.product;
 
 
-import com.wczy.gulimall.product.entity.AttrEntity;
-import com.wczy.gulimall.product.service.AttrService;
+import com.alibaba.fastjson.JSON;
+import com.wczy.gulimall.product.entity.dto.CategoryDto;
+import com.wczy.gulimall.product.service.CategoryService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class GulimallProductApplicationTests {
 
 	@Autowired
-	AttrService attrService;
+	CategoryService categoryService;
 
 	@Test
-	public void contextLoads() {
-		AttrEntity attrEntity = new AttrEntity();
-		attrEntity.setAttrName("222");
-		attrService.save(attrEntity);
+	public void listWithTree() {
+		List<CategoryDto> categoryDtos = categoryService.listWithTree();
+		System.out.println(JSON.toJSONString(categoryDtos));
 	}
 
 }
