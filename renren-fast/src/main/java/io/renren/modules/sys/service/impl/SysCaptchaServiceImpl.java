@@ -49,10 +49,6 @@ public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaDao, SysCaptcha
         captchaEntity.setCode(code);
         //5分钟后过期
         redisUtils.set(uuid, code, 300);
-
-//        captchaEntity.setExpireTime(DateUtils.addDateMinutes(new Date(), 5));
-//        this.save(captchaEntity);
-
         return producer.createImage(code);
     }
 
@@ -67,15 +63,5 @@ public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaDao, SysCaptcha
             return true;
         }
         return false;
-
-
-//        SysCaptchaEntity captchaEntity = this.getOne(new QueryWrapper<SysCaptchaEntity>().eq("uuid", uuid));
-//        //
-//        this.removeById(uuid);
-//
-//        if(captchaEntity.getCode().equalsIgnoreCase(code) && captchaEntity.getExpireTime().getTime() >= System.currentTimeMillis()){
-//            return true;
-//        }
-//        return false;
     }
 }
